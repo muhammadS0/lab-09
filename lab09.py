@@ -10,34 +10,52 @@
 
 def two_sum(nums, target):
     # Outline (write your plan here first):
-    #   ...
-    # TODO: return the indices [i, j] (i < j) of the two numbers in `nums` that add up
-    #   to `target`. Assume there is exactly one answer.
-    pass
+    #   Save each number's index and check whether its complement was seen earlier.
+    seen = {}
+    for j, number in enumerate(nums):
+        needed = target - number
+        if needed in seen:
+            return [seen[needed], j]
+        seen[number] = j
 
 
 def max_profit(prices):
     # Outline:
-    #   ...
-    # TODO: `prices[i]` is a stock price on day i. Return the most profit obtainable by
-    #   buying on one day and selling on a LATER day. If no profit is possible, return 0.
-    pass
+    #   Track the lowest price so far and the best profit from selling each day.
+    if len(prices) < 2:
+        return 0
+
+    lowest_price = prices[0]
+    best_profit = 0
+    for price in prices[1:]:
+        best_profit = max(best_profit, price - lowest_price)
+        lowest_price = min(lowest_price, price)
+    return best_profit
 
 
 def max_subarray(nums):
     # Outline:
-    #   ...
-    # TODO: return the largest sum of any contiguous (in-a-row) block of numbers in
-    #   `nums`. The list has at least one number.
-    pass
+    #   Extend the current contiguous sum or start a new one at each number.
+    current_sum = best_sum = nums[0]
+    for number in nums[1:]:
+        current_sum = max(number, current_sum + number)
+        best_sum = max(best_sum, current_sum)
+    return best_sum
 
 
 def is_balanced(s):   # Part 4 - stretch (optional)
     # Outline:
-    #   ...
-    # TODO: return True if every bracket in `s` is closed correctly and in the right
-    #   order. The brackets are ( ) [ ] { }. (Hint: a list used as a stack works well.)
-    pass
+    #   Keep opening brackets in a stack and match each closing bracket to the latest
+    #   opening bracket.
+    matching_open = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    for char in s:
+        if char in "([{":
+            stack.append(char)
+        elif char in matching_open:
+            if not stack or stack.pop() != matching_open[char]:
+                return False
+    return not stack
 
 
 def main():
